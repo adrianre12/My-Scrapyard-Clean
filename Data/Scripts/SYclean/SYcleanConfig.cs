@@ -23,8 +23,7 @@ namespace SYclean
         public bool CleanFloatingObjects = false;
         public bool VoxelReset = false;
 
-
-        public static SYcleanConfig Load() {
+       public static SYcleanConfig Load() {
             SYcleanConfig config = new SYcleanConfig();
 
             if (MyAPIGateway.Utilities.FileExistsInWorldStorage(configFileName, typeof(SYcleanConfig)))
@@ -44,6 +43,7 @@ namespace SYclean
                 writer.Write(configStr);
             }
             return config;
+
         }
     }
 }

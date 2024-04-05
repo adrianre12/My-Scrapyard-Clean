@@ -12,6 +12,7 @@ namespace SYclean
 
         public SYcleanConfig Config;
         private int ticks;
+        private ChatCommandHandler commandHandler;
 
         public override void LoadData()
         {
@@ -20,8 +21,23 @@ namespace SYclean
 
             MyLog.Default.WriteLine("Init SYclean");
 
+            if (!MyAPIGateway.Session.IsServer)
+            {
+                MyLog.Default.WriteLine("SYclean: This is not the game server, not starting.");
+                return;
+            }
+
             Config = SYcleanConfig.Load();
 
+            commandHandler = new ChatCommandHandler();
+            commandHandler.Register();
+
+        }
+
+        protected override void UnloadData()
+        {
+            Instance = null; // important for avoiding this object to remain allocated in memory
+            commandHandler.Unregister();
         }
 
         public override void UpdateBeforeSimulation()
