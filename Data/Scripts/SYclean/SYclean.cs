@@ -48,7 +48,7 @@ namespace SYclean
         public override void UpdateBeforeSimulation()
         {
             // executed every tick, 60 times a second, before physics simulation and only if game is not paused.
-            ++ticks;
+ 
             if (cleanNow && ticks > 600) // 10s after game start 
             {
                 cleanNow = false;
@@ -67,7 +67,7 @@ namespace SYclean
                     MyLog.Default.WriteLine($"SYclean: Deleted {c} floating objects.");
                 }
             }
-            if (ticks > intervalTicks)
+            if (ticks > intervalTicks && intervalTicks > 0)
             {
                 ticks = 0;
 
@@ -85,6 +85,7 @@ namespace SYclean
                     MyLog.Default.WriteLine($"SYclean: Deleted {c} floating objects.");
                 }
             }
+            ++ticks;
         }
 
     }
