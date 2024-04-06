@@ -44,11 +44,12 @@ namespace SYclean
         {
             // executed every tick, 60 times a second, before physics simulation and only if game is not paused.
             ++ticks;
-            if (ticks > 600) {
-                MyAPIGateway.Utilities.ShowMessage("Sclean", $"{Config.BeaconSubtype}");
+            if (ticks > 600)
+            {
+                MyAPIGateway.Utilities.ShowMessage("SYclean", $"{Config.BeaconSubtype}");
                 ticks = 0;
             }
         }
-       
+
     }
 }

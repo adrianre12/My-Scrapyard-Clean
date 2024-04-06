@@ -16,7 +16,7 @@ namespace SYclean
         /// Performs the distance filter on gridData
         /// </summary>
         /// <returns></returns>
-        public static GridData FilteredGridData(bool filter)
+        public static GridData FilteredGridData(bool filter, bool ignorePlayers = false)
         {
             int playerRange = SYclean.Instance.Config.PlayerRange;
             int playerRangeSqr = playerRange * playerRange;
@@ -35,12 +35,16 @@ namespace SYclean
             };
 
             // get player positions
-            List<IMyPlayer> players = new List<IMyPlayer>();
-            MyAPIGateway.Players.GetPlayers(players);
-            foreach (var player in players) {
-                filteredGridData.PlayerPositions.Add(player.GetPosition()); 
+            if (!ignorePlayers) //Hack way but it will work
+            {
+                List<IMyPlayer> players = new List<IMyPlayer>();
+                MyAPIGateway.Players.GetPlayers(players);
+                foreach (var player in players)
+                {
+                    filteredGridData.PlayerPositions.Add(player.GetPosition());
+                }
             }
-            
+
             //Only do if Player range is greater than beacon range
             if (playerRange > beaconRange)
             {
@@ -60,7 +64,8 @@ namespace SYclean
                         filteredGridData.BeaconPositions.Add(beaconPosition);
                     }
                 }
-            } else
+            }
+            else
             {
                 MyLog.Default.WriteLine("SYclean: PlayerRange is less than BeaconRange, beacon optimisation not done.");
             }
@@ -90,14 +95,14 @@ namespace SYclean
                         }
                     }
 
-                    if(!useGroup)
+                    if (!useGroup)
                         break;
                 }
 
                 if (!filter || useGroup)
                 {
                     filteredGridData.GridGroups.Add(gridGroup);
-                }             
+                }
             }
 
             return filteredGridData;
@@ -133,7 +138,7 @@ namespace SYclean
             var beaconPositions = new List<Vector3D>();
 
             List<long> NPCids = GetNPCids();
-            List<IMyGridGroupData> groups = new List<IMyGridGroupData>(); 
+            List<IMyGridGroupData> groups = new List<IMyGridGroupData>();
             MyAPIGateway.GridGroups.GetGridGroups(GridLinkTypeEnum.Logical, groups);
             MyAPIGateway.Parallel.ForEach(groups, (group) =>
             {
@@ -144,7 +149,7 @@ namespace SYclean
                 group.GetGrids(grids);
                 foreach (IMyCubeGrid grid in grids) // have lost the check for projectors
                 {
-                    var gridInfo = GetGridInfo(grid,NPCids);
+                    var gridInfo = GetGridInfo(grid, NPCids);
 
                     // has player beacon
                     if (gridInfo.BeaconPositions.Count > 0 && gridInfo.Owner == OwnerType.Player)
@@ -155,7 +160,7 @@ namespace SYclean
                         }
                         use = false; // Not really needed as it would be filtered later by the beacon zone but it is an optimisation.
                     }
-                    
+
                     // player grid and has power
                     if (gridInfo.Owner == OwnerType.Player && gridInfo.IsPowered)
                     {
@@ -216,7 +221,7 @@ namespace SYclean
             {
                 BeaconPositions = new List<Vector3D>()
             };
-            
+
             MyResourceSourceComponent component;
             long ownerId;
             string endsWith = SYclean.Instance.Config.BeaconSubtype;
@@ -239,7 +244,7 @@ namespace SYclean
                         gridInfo.IsPowered = true;
                 }
             }
-            
+
             if (grid.BigOwners.Count > 0 && grid.BigOwners[0] != 0)
                 ownerId = grid.BigOwners[0];
             else if (grid.BigOwners.Count > 1)
@@ -253,7 +258,7 @@ namespace SYclean
                 gridInfo.Owner = OwnerType.NPC;
             else
                 gridInfo.Owner = OwnerType.Player;
-            
+
             return gridInfo;
         }
 
@@ -261,10 +266,11 @@ namespace SYclean
         {
             List<long> NPCids = new List<long>();
             var factions = MyAPIGateway.Session.Factions.Factions;
-            foreach (var faction in factions.Values) {
+            foreach (var faction in factions.Values)
+            {
                 if (!faction.IsEveryoneNpc())
                     continue;
-                foreach(var member in faction.Members.Values)
+                foreach (var member in faction.Members.Values)
                 {
                     NPCids.Add(member.PlayerId);
                 }

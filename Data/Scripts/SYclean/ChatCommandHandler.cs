@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sandbox.ModAPI;
+using VRage.Utils;
 
 namespace SYclean
 {
@@ -24,15 +25,35 @@ namespace SYclean
 
         void MessageEntered(string text, ref bool send)
         {
-            if(!text.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) {
+            if (!text.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            {
                 return;
             }
             send = false;
             var args = text.Split(' ');
-
-            if(args.Length == 1 ) {
+            MyAPIGateway.Utilities.ShowMessage("SYclean", $"args length {args.Length}");
+            if (args.Length == 1)
+            {
                 Commands.Help();
                 return;
+            }
+
+            bool ignorePlayers = false;
+
+            if (args.Length > 2)
+            {
+                switch (args[2].ToLower())
+                {
+                    case "nop":
+                        {
+                            ignorePlayers = true;
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
             }
 
             switch (args[1].ToLower())
@@ -44,7 +65,7 @@ namespace SYclean
                     }
                 case "list":
                     {
-                        Commands.List();
+                        Commands.List(ignorePlayers);
                         break;
                     }
 
@@ -54,6 +75,11 @@ namespace SYclean
                         break;
                     }
 
+                case "delete":
+                    {
+                        Commands.Delete(ignorePlayers);
+                        break;
+                    }
                 default:
                     {
                         MyAPIGateway.Utilities.ShowMessage("SYclean", "Unrecognised command");

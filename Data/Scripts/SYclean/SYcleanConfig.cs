@@ -23,7 +23,8 @@ namespace SYclean
         public bool CleanFloatingObjects = false;
         public bool VoxelReset = false;
 
-       public static SYcleanConfig Load() {
+        public static SYcleanConfig Load()
+        {
             SYcleanConfig config = new SYcleanConfig();
 
             if (MyAPIGateway.Utilities.FileExistsInWorldStorage(configFileName, typeof(SYcleanConfig)))
@@ -35,7 +36,7 @@ namespace SYclean
                 }
                 return config;
             }
-            
+
             MyLog.Default.WriteLine("SYclean: Config file not found, writing default");
             using (var writer = MyAPIGateway.Utilities.WriteFileInWorldStorage(configFileName, typeof(SYcleanConfig)))
             {
