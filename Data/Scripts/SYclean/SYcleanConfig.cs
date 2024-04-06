@@ -19,8 +19,8 @@ namespace SYclean
         public int PlayerRange = 10000;
         public int ScrapBeaconRange = 250;
         public int IntervalMins = 60;
-        public bool CleanAtStartup = false;
-        public bool CleanFloatingObjects = false;
+        public bool CleanAtStartup = true;
+        public bool CleanFloatingObjects = true;
 
         public static SYcleanConfig Load()
         {

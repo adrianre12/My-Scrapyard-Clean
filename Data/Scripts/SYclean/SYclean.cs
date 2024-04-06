@@ -51,6 +51,8 @@ namespace SYclean
             ++ticks;
             if (cleanNow && ticks > 600)
             {
+                cleanNow = false;
+
                 MyAPIGateway.Utilities.ShowMessage("SYclean", "Startup Clean");
                 MyLog.Default.WriteLine("SYclean: Startup Clean");
 
@@ -58,14 +60,17 @@ namespace SYclean
                 MyAPIGateway.Utilities.ShowMessage("SYclean", $"Deleted {c} grids matching the Scrapyard rules.");
                 MyLog.Default.WriteLine($"SYclean: Deleted {c} grids matching the Scrapyard rules.");
 
-                c = Commands.DeleteFloatingObjects();
-                MyAPIGateway.Utilities.ShowMessage("SYclean", $"Deleted {c} floating objects.");
-                MyLog.Default.WriteLine($"SYclean: Deleted {c} floating objects.");
-
-                cleanNow = false;
+                if (Config.CleanFloatingObjects)
+                {
+                    c = Commands.DeleteFloatingObjects();
+                    MyAPIGateway.Utilities.ShowMessage("SYclean", $"Deleted {c} floating objects.");
+                    MyLog.Default.WriteLine($"SYclean: Deleted {c} floating objects.");
+                }
             }
             if (ticks > intervalTicks)
             {
+                ticks = 0;
+
                 MyAPIGateway.Utilities.ShowMessage("SYclean", "Cleanup");
                 MyLog.Default.WriteLine("SYclean: Timmed Clean");
 
@@ -73,11 +78,12 @@ namespace SYclean
                 MyAPIGateway.Utilities.ShowMessage("SYclean", $"Deleted {c} grids matching the Scrapyard rules.");
                 MyLog.Default.WriteLine($"SYclean: Deleted {c} grids matching the Scrapyard rules.");
 
-                c = Commands.DeleteFloatingObjects();
-                MyAPIGateway.Utilities.ShowMessage("SYclean", $"Deleted {c} floating objects.");
-                MyLog.Default.WriteLine($"SYclean: Deleted {c} floating objects.");
-
-                ticks = 0;
+                if (Config.CleanFloatingObjects)
+                {
+                    c = Commands.DeleteFloatingObjects();
+                    MyAPIGateway.Utilities.ShowMessage("SYclean", $"Deleted {c} floating objects.");
+                    MyLog.Default.WriteLine($"SYclean: Deleted {c} floating objects.");
+                }
             }
         }
 
