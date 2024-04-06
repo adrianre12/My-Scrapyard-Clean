@@ -49,20 +49,20 @@ namespace SYclean
         {
             // executed every tick, 60 times a second, before physics simulation and only if game is not paused.
             ++ticks;
-            if (cleanNow && ticks > 600)
+            if (cleanNow && ticks > 600) // 10s after game start 
             {
                 cleanNow = false;
 
                 MyAPIGateway.Utilities.ShowMessage("SYclean", "Startup Clean");
                 MyLog.Default.WriteLine("SYclean: Startup Clean");
 
-                var c = Commands.DeleteGrids(true);
+                var c = CommandImp.DeleteGrids(true); // true means ignore players, clean as if no one is playing.
                 MyAPIGateway.Utilities.ShowMessage("SYclean", $"Deleted {c} grids matching the Scrapyard rules.");
                 MyLog.Default.WriteLine($"SYclean: Deleted {c} grids matching the Scrapyard rules.");
 
                 if (Config.CleanFloatingObjects)
                 {
-                    c = Commands.DeleteFloatingObjects();
+                    c = CommandImp.DeleteFloatingObjects();
                     MyAPIGateway.Utilities.ShowMessage("SYclean", $"Deleted {c} floating objects.");
                     MyLog.Default.WriteLine($"SYclean: Deleted {c} floating objects.");
                 }
@@ -74,13 +74,13 @@ namespace SYclean
                 MyAPIGateway.Utilities.ShowMessage("SYclean", "Cleanup");
                 MyLog.Default.WriteLine("SYclean: Timmed Clean");
 
-                var c = Commands.DeleteGrids(false);
+                var c = CommandImp.DeleteGrids(false);
                 MyAPIGateway.Utilities.ShowMessage("SYclean", $"Deleted {c} grids matching the Scrapyard rules.");
                 MyLog.Default.WriteLine($"SYclean: Deleted {c} grids matching the Scrapyard rules.");
 
                 if (Config.CleanFloatingObjects)
                 {
-                    c = Commands.DeleteFloatingObjects();
+                    c = CommandImp.DeleteFloatingObjects();
                     MyAPIGateway.Utilities.ShowMessage("SYclean", $"Deleted {c} floating objects.");
                     MyLog.Default.WriteLine($"SYclean: Deleted {c} floating objects.");
                 }

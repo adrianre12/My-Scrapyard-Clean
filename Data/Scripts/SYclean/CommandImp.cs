@@ -277,5 +277,48 @@ namespace SYclean
             }
             return NPCids;
         }
+
+        public static int DeleteGrids(bool ignorePlayers)
+        {
+            if (ignorePlayers)
+                MyAPIGateway.Utilities.ShowMessage("SYclean", "Players ignored");
+
+            CommandImp.GridData gridData = CommandImp.FilteredGridData(true, ignorePlayers);
+
+            var c = 0;
+            foreach (var gridGroup in gridData.GridGroups)
+            {
+                foreach (var grid in gridGroup)
+                {
+                    c++;
+                    MyLog.Default.WriteLine($"SYclean: Deleting grid: {grid.EntityId}: {grid.DisplayName}");
+
+                    //Eject Pilot
+                    var blocks = grid.GetFatBlocks<MyCockpit>();
+                    foreach (var cockpit in blocks)
+                    {
+                        cockpit.RemovePilot();
+                    }
+
+                    grid.Close();
+                }
+            }
+            return c;
+        }
+
+
+        public static int DeleteFloatingObjects()
+        {
+            MyLog.Default.WriteLine("SYclean: delete floating command");
+            var count = 0;
+            foreach (var floater in MyEntities.GetEntities().OfType<MyFloatingObject>())
+            {
+                MyLog.Default.WriteLine($"SYclean: Deleting floating object: {floater.DisplayName}");
+                floater.Close();
+                count++;
+            }
+            MyLog.Default.WriteLine($"SYclean: Cleanup deleted {count} floating objects");
+            return count;
+        }
     }
 }

@@ -49,14 +49,14 @@ namespace SYclean
         public static void Delete(bool ignorePlayers)
         {
             MyLog.Default.WriteLine("SYclean: delete command");
-            var c = DeleteGrids(ignorePlayers);
+            var c = CommandImp.DeleteGrids(ignorePlayers);
             MyAPIGateway.Utilities.ShowMessage("SYclean", $"Deleted {c} grids matching the Scrapyard rules.");
             MyLog.Default.WriteLine($"SYclean: Deleted {c} grids matching the Scrapyard rules.");
         }
 
         public static void DeleteFloating()
         {
-            var c = DeleteFloatingObjects();
+            var c = CommandImp.DeleteFloatingObjects();
             MyAPIGateway.Utilities.ShowMessage("SYclean", $"Deleted {c} floating objects.");
         }
 
@@ -75,48 +75,6 @@ namespace SYclean
             CommandImp.GridData gridData;
             gridData = CommandImp.FilteredGridData(false);
             RespondGridData(gridData);
-        }
-
-        public static int DeleteGrids(bool ignorePlayers)
-        {
-            if (ignorePlayers)
-                MyAPIGateway.Utilities.ShowMessage("SYclean", "Players ignored");
-
-            CommandImp.GridData gridData = CommandImp.FilteredGridData(true, ignorePlayers);
-
-            var c = 0;
-            foreach (var gridGroup in gridData.GridGroups)
-            {
-                foreach (var grid in gridGroup)
-                {
-                    c++;
-                    MyLog.Default.WriteLine($"SYclean: Deleting grid: {grid.EntityId}: {grid.DisplayName}");
-
-                    //Eject Pilot
-                    var blocks = grid.GetFatBlocks<MyCockpit>();
-                    foreach (var cockpit in blocks)
-                    {
-                        cockpit.RemovePilot();
-                    }
-
-                    grid.Close();
-                }
-            }
-            return c;
-        }
-
-        public static int DeleteFloatingObjects()
-        {
-            MyLog.Default.WriteLine("SYclean: delete floating command");
-            var count = 0;
-            foreach (var floater in MyEntities.GetEntities().OfType<MyFloatingObject>())
-            {
-                MyLog.Default.WriteLine($"SYclean: Deleting floating object: {floater.DisplayName}");
-                floater.Close();
-                count++;
-            }
-            MyLog.Default.WriteLine($"SYclean: Cleanup deleted {count} floating objects");
-            return count;
         }
 
         private static void RespondGridData(CommandImp.GridData gridData)
