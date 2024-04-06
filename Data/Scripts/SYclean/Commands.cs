@@ -16,18 +16,24 @@ namespace SYclean
             var sb = new StringBuilder();
             sb.AppendLine("!SYclean");
             sb.AppendLine("  Display command help");
-            sb.AppendLine("!SYclean info");
+            sb.AppendLine("!SYclean config");
             sb.AppendLine("  Show information about current configuration");
             sb.AppendLine("!SYclean list");
             sb.AppendLine("  Show which grids would be deleted");
+            sb.AppendLine("!SYclean list nop");
+            sb.AppendLine("  Show which grids would be deleted without players");
             sb.AppendLine("!SYclean list all");
             sb.AppendLine("  Show all grids found");
             sb.AppendLine("!SYclean delete");
             sb.AppendLine("  Delete grids that match the Scrapyard rules.");
+            sb.AppendLine("!SYclean delete nop");
+            sb.AppendLine("  Delete grids that match the Scrapyard rules without players");
+            sb.AppendLine("!SYclean delete floating");
+            sb.AppendLine("  Delete floating objects.");
             MyAPIGateway.Utilities.ShowMissionScreen("SYclean", "", "Help", sb.ToString(), null, "Close");
         }
 
-        public static void Info()
+        public static void ConfigInfo()
         {
             var sb = new StringBuilder();
             sb.AppendLine($"Beacon SubtypeId ends with: {SYclean.Instance.Config.BeaconSubtype}");
@@ -37,23 +43,23 @@ namespace SYclean
             sb.AppendLine("Other");
             sb.AppendLine($"  Clean At Startup: {SYclean.Instance.Config.CleanAtStartup}");
             sb.AppendLine($"  Clean Floating Objects: {SYclean.Instance.Config.CleanFloatingObjects}");
-            sb.AppendLine($"  Reset All Voxels: {SYclean.Instance.Config.VoxelReset}");
 
             MyAPIGateway.Utilities.ShowMissionScreen("SYclean", "", "Information", sb.ToString(), null, "Close");
         }
         public static void Delete(bool ignorePlayers)
         {
             MyLog.Default.WriteLine("SYclean: delete command");
-            var c = deleteGrids(ignorePlayers);
+            var c = DeleteGrids(ignorePlayers);
             MyAPIGateway.Utilities.ShowMessage("SYclean", $"Deleted {c} grids matching the Scrapyard rules.");
-            MyLog.Default.WriteLine($"SYclean: deleted {c} grids matching the Scrapyard rules.");
+            MyLog.Default.WriteLine($"SYclean: Deleted {c} grids matching the Scrapyard rules.");
         }
 
-        public static void DeleteFloating(bool ignorePlayers)
+        public static void DeleteFloating()
         {
-            var c = deleteFloatingObjects();
+            var c = DeleteFloatingObjects();
             MyAPIGateway.Utilities.ShowMessage("SYclean", $"Deleted {c} floating objects.");
         }
+
         public static void List(bool ignorePlayers)
         {
             if (ignorePlayers)
@@ -71,7 +77,7 @@ namespace SYclean
             RespondGridData(gridData);
         }
 
-        private static int deleteGrids(bool ignorePlayers)
+        public static int DeleteGrids(bool ignorePlayers)
         {
             if (ignorePlayers)
                 MyAPIGateway.Utilities.ShowMessage("SYclean", "Players ignored");
@@ -99,7 +105,7 @@ namespace SYclean
             return c;
         }
 
-        public static int deleteFloatingObjects()
+        public static int DeleteFloatingObjects()
         {
             MyLog.Default.WriteLine("SYclean: delete floating command");
             var count = 0;

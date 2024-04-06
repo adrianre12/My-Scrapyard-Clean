@@ -18,10 +18,9 @@ namespace SYclean
         public string BeaconSubtype = "ScrapBeacon";
         public int PlayerRange = 10000;
         public int ScrapBeaconRange = 250;
-        public int IntervalMins = 1;
+        public int IntervalMins = 60;
         public bool CleanAtStartup = false;
         public bool CleanFloatingObjects = false;
-        public bool VoxelReset = false;
 
         public static SYcleanConfig Load()
         {

@@ -30,46 +30,34 @@ namespace SYclean
                 return;
             }
             send = false;
-            var args = text.Split(' ');
-            MyAPIGateway.Utilities.ShowMessage("SYclean", $"args length {args.Length}");
+            var args = text.Split(new char[] { ' ' }, 2);
+
             if (args.Length == 1)
             {
                 Commands.Help();
                 return;
             }
 
-            bool ignorePlayers = false;
-
-            if (args.Length > 2)
-            {
-                switch (args[2].ToLower())
-                {
-                    case "nop":
-                        {
-                            ignorePlayers = true;
-                            break;
-                        }
-                    default:
-                        {
-                            break;
-                        }
-                }
-            }
-
             switch (args[1].ToLower())
             {
-                case "info":
+                case "config":
                     {
-                        Commands.Info();
+                        Commands.ConfigInfo();
                         break;
                     }
                 case "list":
                     {
-                        Commands.List(ignorePlayers);
+                        Commands.List(false);
                         break;
                     }
 
-                case "listall":
+                case "list nop":
+                    {
+                        Commands.List(true);
+                        break;
+                    }
+
+                case "list all":
                     {
                         Commands.ListAll();
                         break;
@@ -77,9 +65,22 @@ namespace SYclean
 
                 case "delete":
                     {
-                        Commands.Delete(ignorePlayers);
+                        Commands.Delete(false);
                         break;
                     }
+
+                case "delete nop":
+                    {
+                        Commands.Delete(true);
+                        break;
+                    }
+
+                case "delete floating":
+                    {
+                        Commands.DeleteFloating();
+                        break;
+                    }
+
                 default:
                     {
                         MyAPIGateway.Utilities.ShowMessage("SYclean", "Unrecognised command");
