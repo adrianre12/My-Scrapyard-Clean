@@ -1,6 +1,6 @@
 ## My-Scrapyard-Clean
 This Space Engineers Mod performs the cleanup of Splitsie-style Scrapyard Scenarios. It is a port of my Torch Plugin [Sclean](https://github.com/adrianre12/Sclean). 
-This mod is intended for solo games, it should work for self-hosted games but that is untested. It has not been tested on a dedicated server, it is much better to use my Sclean plugin which is available via Torch.
+This mod is intended for solo games, it should work for shared games but that is untested. It has not been tested on a dedicated server, it is much better to use my Sclean plugin which is available via Torch.
 
 For these types of scenarios, it is necessary to have the SE trash cleanup disabled, this means that the player must periodically manually clean up the excess grids and floating objects.
 Installing this mod will perform server-style periodic cleanups automatically, it also provides chat commands to list and delete grids.
