@@ -1,6 +1,5 @@
 ﻿using Sandbox.Game.Entities;
 using Sandbox.Game.EntityComponents;
-using Sandbox.Game.World;
 using Sandbox.ModAPI;
 using System.Collections.Generic;
 using System.Linq;
@@ -152,7 +151,7 @@ namespace SYclean
                     var gridInfo = GetGridInfo(grid, NPCids);
 
                     // has player beacon
-                    if (gridInfo.BeaconPositions.Count > 0 && gridInfo.Owner == OwnerType.Player)
+                    if (gridInfo.BeaconPositions.Count > 0)
                     {
                         lock (beaconPositions)
                         {
