@@ -1,12 +1,4 @@
-﻿using ParallelTasks;
-using Sandbox.ModAPI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using System.Xml.Serialization;
+﻿using Sandbox.ModAPI;
 using VRage.Utils;
 
 namespace SYclean
@@ -36,12 +28,13 @@ namespace SYclean
                 return config;
             }
 
-            MyLog.Default.WriteLine("SYclean: Config file not found, writing default");
+            MyLog.Default.WriteLine("SYclean: Config file not found, writing default.");
             using (var writer = MyAPIGateway.Utilities.WriteFileInWorldStorage(configFileName, typeof(SYcleanConfig)))
             {
                 var configStr = MyAPIGateway.Utilities.SerializeToXML<SYcleanConfig>(config);
                 writer.Write(configStr);
             }
+            config.CleanAtStartup = false; //suppress the very first clean
             return config;
 
         }
